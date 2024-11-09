@@ -20,7 +20,17 @@ public class Persona extends javax.swing.JFrame {
         conDB = new ConexionBaseDatos();
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     }
-
+    
+    private void limpiarValoresCajas(){
+        txtClave.setText(null);
+        txtName.setText(null);
+        txtDom.setText(null);
+        txtTef.setText(null);
+        txtEmail.setText(null);
+        txtFechNac.setText(null);
+        cbxGenero.setSelectedIndex(0);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -228,9 +238,18 @@ public class Persona extends javax.swing.JFrame {
             ps.setString(4, txtTef.getText());
             ps.setString(5, txtEmail.getText());
             ps.setDate(6, java.sql.Date.valueOf(LocalDate.parse(txtFechNac.getText(), formatter)));
-
+            ps.setString(7, cbxGenero.getSelectedItem().toString());
             
-        }catch() {}
+            if(ps.executeUpdate() > 0){
+                System.out.println("Se guardo Correctamente");
+            }else {
+                System.out.println("error al guardar");
+            }
+            con.close();
+            
+        }catch(Exception e) {
+            System.out.println("error: " + e);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
