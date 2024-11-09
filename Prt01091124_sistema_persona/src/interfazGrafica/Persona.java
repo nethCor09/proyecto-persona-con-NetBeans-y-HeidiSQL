@@ -1,10 +1,24 @@
 
 package interfazGrafica;
 
-public class Persona extends javax.swing.JFrame {
+import conexionDataBase.ConexionBaseDatos;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
+public class Persona extends javax.swing.JFrame {
+    private ConexionBaseDatos conDB;
+    private Connection con;
+    private PreparedStatement ps;
+    private ResultSet rs;
+    private DateTimeFormatter formatter;
     public Persona() {
         initComponents();
+        conDB = new ConexionBaseDatos();
+        formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     }
 
     @SuppressWarnings("unchecked")
@@ -71,6 +85,11 @@ public class Persona extends javax.swing.JFrame {
         });
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnModificar.setText("Modificar");
 
@@ -197,6 +216,22 @@ public class Persona extends javax.swing.JFrame {
     private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtClaveActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        try {
+            con = conDB.getConnection();
+            ps = con.prepareStatement("INSERT INTO sistema_persona (clave, nombre, domicilio,"
+                    + "telefono, correo_electronico, fecha_nacimiento, genero) VALUES (?,?,?,?,?,?,?)");
+            ps.setString(1, txtClave.getText());
+            ps.setString(2, txtName.getText());
+            ps.setString(3, txtDom.getText());
+            ps.setString(4, txtTef.getText());
+            ps.setString(5, txtEmail.getText());
+            ps.setDate(6, java.sql.Date.valueOf(LocalDate.parse(txtFechNac.getText(), formatter)));
+
+            
+        }catch() {}
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
