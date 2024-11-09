@@ -20,5 +20,8 @@ public class ConexionBaseDatos {
             System.err.println("No se puedo establecer conexion con la Base de Datos. ERROR: "+e);
         }
     }
+    public Connection getConnection() {
+        return con;
+    }
     
 }
