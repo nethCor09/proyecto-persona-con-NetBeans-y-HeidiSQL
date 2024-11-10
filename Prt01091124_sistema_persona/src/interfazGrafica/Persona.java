@@ -268,6 +268,20 @@ public class Persona extends javax.swing.JFrame {
             ps = con.prepareStatement("SELECT * FROM sistema_persona WHERE clave = ?");
             ps.setString(1, txtClave.getText());
             
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+                txtId.setText(rs.getString("id"));
+                txtName.setText(rs.getString("nombre"));
+                txtDom.setText(rs.getString("domicilio"));
+                txtTef.setText(rs.getString("telefono"));
+                txtEmail.setText(rs.getString("correo_electronico"));
+                txtFechNac.setText(rs.getString("fecha_nacimiento"));
+                cbxGenero.setSelectedItem(rs.getString("genero"));
+            }else {
+                System.out.println("no existe una persona con la clave");
+            }
+            
         }catch(Exception e) {
             System.out.println("error: " + e);            
         }
