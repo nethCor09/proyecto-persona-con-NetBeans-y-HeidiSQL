@@ -18,7 +18,7 @@ public class Persona extends javax.swing.JFrame {
     public Persona() {
         initComponents();
         conDB = new ConexionBaseDatos();
-        formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         txtId.setVisible(false);
     }
     
@@ -103,10 +103,25 @@ public class Persona extends javax.swing.JFrame {
         });
 
         btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -287,6 +302,62 @@ public class Persona extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiarValoresCajas();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        
+        try {
+            con = conDB.getConnection();
+            ps = con.prepareStatement("UPDATE sistema_persona set clave=?, nombre=?, domicilio=?,"
+                    + "telefono=?, correo_electronico=?, fecha_nacimiento=?, genero=? WHERE id=?");
+            ps.setString(1, txtClave.getText());
+            ps.setString(2, txtName.getText());
+            ps.setString(3, txtDom.getText());
+            ps.setString(4, txtTef.getText());
+            ps.setString(5, txtEmail.getText());
+            ps.setDate(6, java.sql.Date.valueOf(LocalDate.parse(txtFechNac.getText(), formatter)));
+            ps.setString(7, cbxGenero.getSelectedItem().toString());
+            ps.setString(8, txtId.getText());
+            
+            if(ps.executeUpdate() > 0){
+                System.out.println("Se Modifico Correctamente");
+                limpiarValoresCajas();
+            }else {
+                System.out.println("error al Modificar");
+                limpiarValoresCajas();
+            }
+            con.close();
+            
+        }catch(Exception e) {
+            System.out.println("error: " + e);
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        
+        try {
+            con = conDB.getConnection();
+            ps = con.prepareStatement("DELETE FROM sistema_persona WHERE id=?");
+            ps.setString(1, txtId.getText());
+            //ps.setInt(1, Integer.parseInt(txtId.getText()));
+            
+            if(ps.executeUpdate() > 0){
+                System.out.println("Se Elimino Correctamente");
+                limpiarValoresCajas();
+            }else {
+                System.out.println("error al Eliminar");
+                limpiarValoresCajas();
+            }
+            con.close();
+            
+        }catch(Exception e) {
+            System.out.println("error: " + e);
+        }
+        
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
